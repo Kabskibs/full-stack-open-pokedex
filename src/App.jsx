@@ -1,5 +1,7 @@
 import React from 'react'
-import { BrowserRouter as Routes, Route, useMatch } from 'react-router-dom'
+// For some reason, tests dont pass if Router is not defined here (WTF!?)
+// eslint-disable-next-line no-unused-vars
+import { BrowserRouter as Router, Routes, Route, useMatch } from 'react-router-dom'
 import { useApi } from './useApi'
 import LoadingSpinner from './LoadingSpinner'
 import ErrorMessage from './ErrorMessage'
