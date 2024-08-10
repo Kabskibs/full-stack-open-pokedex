@@ -41,7 +41,7 @@ jobs:
         run: |
           curl "$deploy_url"
       - name: Notify on Discord if deployment successful
-        uses: rjstone/discord-webhook-notify@v1
+        uses: rjstone/discord-webhook-notify@v1.0.4
         if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip') }}
         with:
           severity: info
