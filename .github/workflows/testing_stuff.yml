@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+  COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, ' ') }}
 
 jobs:
   a_test_job:
@@ -22,4 +22,5 @@ jobs:
           COMMITS: ${{ toJson(github.event.commits) }}
         run: echo "$COMMITS"
       - name: commit messages
+        if: "!contains(env.COMMIT_MESSAGES, '#skip')"
         run: echo "$COMMIT_MESSAGES"
