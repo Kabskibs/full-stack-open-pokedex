@@ -48,7 +48,7 @@ jobs:
           username: Kabs Pokedex
           text: New version of Pokedex deployed!
           details: 'Deployed to https://full-stack-open-pokedex-immb.onrender.com by ${{ github.actor }}'
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
