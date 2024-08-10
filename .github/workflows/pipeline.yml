@@ -40,6 +40,15 @@ jobs:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
           curl "$deploy_url"
+      - name: Notify on Discord if deployment successful
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip') }}
+        with:
+          severity: info
+          username: Kabs Pokedex
+          text: New version of Pokedex deployed!
+          details: 'Deployed to https://full-stack-open-pokedex-immb.onrender.com by ${{ github.actor }}'
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
