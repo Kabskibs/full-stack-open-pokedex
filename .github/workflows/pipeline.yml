@@ -41,14 +41,25 @@ jobs:
         run: |
           curl "$deploy_url"
       - name: Notify on Discord if deployment successful
-        uses: rjstone/discord-webhook-notify@v1.0.4
+        uses: tsickert/discord-webhook@v6.0.0
         if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' && !contains(github.event.head_commit.message, '#skip') }}
         with:
-          severity: info
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
           username: Kabs Pokedex
-          text: New version of Pokedex deployed!
-          details: 'Deployed to https://full-stack-open-pokedex-immb.onrender.com by ${{ github.actor }}'
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          embed-title: "New version of Pokedex deployed!"
+          embed-description: "Deployed to https://full-stack-open-pokedex-immb.onrender.com by ${{ github.actor }}"
+          embed-footer-text: "Severity: Info"
+          embed-color: 5763719
+      - name: Notify on Discord if build fails
+        uses: tsickert/discord-webhook@v6.0.0
+        if: ${{ failure() }}
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          username: Kabs Pokedex
+          embed-title: "Pokedex build failed"
+          embed-description: "Commit https://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build"
+          embed-footer-text: "Severity: Error"
+          embed-color: 15548997
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
