@@ -1,9 +1,8 @@
 name: Periodic health check
 
 on:
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize]
+  schedule:
+    - cron: '0 3 */2 * *'
 
 jobs:
   check_render_server_health:
