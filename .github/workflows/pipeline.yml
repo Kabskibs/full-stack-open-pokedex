@@ -23,18 +23,7 @@ jobs:
       - name: lint
         run: npm run eslint
       - name: build
-        id: run_build
         run: npm run build
-      - name: Notify on Discord if build fails
-        uses: tsickert/discord-webhook@v6.0.0
-        if: ${{ failure() && steps.run_build.conclusion == 'failure' }}
-        with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-          username: Kabs Pokedex
-          embed-title: "Pokedex build failed"
-          embed-description: "Commit https://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build"
-          embed-footer-text: "Severity: Error"
-          embed-color: 15548997
       - name: unit tests
         run: npm run test
       - name: playwright tests
@@ -61,6 +50,16 @@ jobs:
           embed-description: "Deployed to https://full-stack-open-pokedex-immb.onrender.com by ${{ github.actor }}"
           embed-footer-text: "Severity: Info"
           embed-color: 5763719
+      - name: Notify on Discord if build fails
+        uses: tsickert/discord-webhook@v6.0.0
+        if: ${{ failure() }}
+        with:
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+          username: Kabs Pokedex
+          embed-title: "Pokedex build failed"
+          embed-description: "Commit https://github.com/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build"
+          embed-footer-text: "Severity: Error"
+          embed-color: 15548997
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
